@@ -1,8 +1,8 @@
 class Strings {
   static const Map<String, String> he = {
     // Welcome Screen
-    'appName': 'לחם אומן',
-    'assistant': 'עוזר',
+    'appName': 'אח ללחם',
+    'assistant': '--',
     
     // Home Screen
     'chooseYourTool': 'בחר כלי',
