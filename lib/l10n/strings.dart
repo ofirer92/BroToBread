@@ -5,8 +5,8 @@ class Strings {
     'assistant': '--',
     
     // Home Screen
-    'chooseYourTool': 'בחר כלי',
-    'recipeCalculator': 'מחשבון מתכונים',
+    'chooseYourTool': '',
+    'recipeCalculator': 'מחשבון יחסים',
     'recipeCalculatorDesc': 'חשב יחסים מושלמים למתכון הלחם שלך',
     'breadTimers': 'טיימרים',
     'breadTimersDesc': 'עקוב אחר הזמנים בכל שלב של הכנת הלחם',
