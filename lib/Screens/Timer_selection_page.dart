@@ -13,9 +13,15 @@ class TimerSelectionPage extends StatelessWidget {
     String? tip,
     required VoidCallback onTap,
   }) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isSmallScreen = screenWidth < 360;
+
     return Card(
       elevation: 4,
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: EdgeInsets.symmetric(
+        horizontal: isSmallScreen ? 12 : 16,
+        vertical: isSmallScreen ? 6 : 8,
+      ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
@@ -23,7 +29,7 @@ class TimerSelectionPage extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(16),
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: EdgeInsets.all(isSmallScreen ? 16 : 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -31,34 +37,34 @@ class TimerSelectionPage extends StatelessWidget {
               Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(12),
+                    padding: EdgeInsets.all(isSmallScreen ? 10 : 12),
                     decoration: BoxDecoration(
                       color: Theme.of(context).primaryColor.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Icon(
                       icon,
-                      size: 32,
+                      size: isSmallScreen ? 28 : 32,
                       color: Theme.of(context).primaryColor,
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  SizedBox(width: isSmallScreen ? 12 : 16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           title,
-                          style: const TextStyle(
-                            fontSize: 22,
+                          style: TextStyle(
+                            fontSize: isSmallScreen ? 19 : 22,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 4),
+                        SizedBox(height: isSmallScreen ? 3 : 4),
                         Text(
                           description,
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: isSmallScreen ? 13 : 14,
                             color: Colors.grey[600],
                           ),
                         ),
@@ -67,36 +73,36 @@ class TimerSelectionPage extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: isSmallScreen ? 16 : 20),
               
               // Features List
               ...features.map((feature) => Padding(
-                padding: const EdgeInsets.only(bottom: 12),
+                padding: EdgeInsets.only(bottom: isSmallScreen ? 10 : 12),
                 child: Row(
                   children: [
                     Icon(
                       Icons.check_circle_outline,
-                      size: 20,
+                      size: isSmallScreen ? 18 : 20,
                       color: Theme.of(context).primaryColor,
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: isSmallScreen ? 10 : 12),
                     Expanded(
                       child: Text(
                         feature,
-                        style: const TextStyle(
-                          fontSize: 16,
+                        style: TextStyle(
+                          fontSize: isSmallScreen ? 14 : 16,
                         ),
                       ),
                     ),
                   ],
                 ),
               )).toList(),
-              
+
               // Tip Section (if provided)
               if (tip != null) ...[
-                const SizedBox(height: 16),
+                SizedBox(height: isSmallScreen ? 12 : 16),
                 Container(
-                  padding: const EdgeInsets.all(12),
+                  padding: EdgeInsets.all(isSmallScreen ? 10 : 12),
                   decoration: BoxDecoration(
                     color: Colors.amber.shade50,
                     borderRadius: BorderRadius.circular(12),
@@ -107,14 +113,14 @@ class TimerSelectionPage extends StatelessWidget {
                       Icon(
                         Icons.lightbulb_outline,
                         color: Theme.of(context).primaryColor,
-                        size: 20,
+                        size: isSmallScreen ? 18 : 20,
                       ),
-                      const SizedBox(width: 12),
+                      SizedBox(width: isSmallScreen ? 10 : 12),
                       Expanded(
                         child: Text(
                           tip,
-                          style: const TextStyle(
-                            fontSize: 14,
+                          style: TextStyle(
+                            fontSize: isSmallScreen ? 13 : 14,
                           ),
                         ),
                       ),
@@ -122,22 +128,24 @@ class TimerSelectionPage extends StatelessWidget {
                   ),
                 ),
               ],
-              
-              const SizedBox(height: 16),
-              
+
+              SizedBox(height: isSmallScreen ? 12 : 16),
+
               // Action Button
               ElevatedButton(
                 onPressed: onTap,
                 style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: EdgeInsets.symmetric(
+                    vertical: isSmallScreen ? 10 : 12,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                child: const Text(
+                child: Text(
                   'בחר',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: isSmallScreen ? 15 : 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

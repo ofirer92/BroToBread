@@ -56,6 +56,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isSmallScreen = screenWidth < 360;
+
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -68,53 +71,60 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             ],
           ),
         ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AnimatedBuilder(
-                animation: _controller,
-                builder: (context, child) {
-                  return Transform.scale(
-                    scale: _scaleAnimation.value,
-                    child: const Icon(
-                      Icons.bakery_dining,
-                      size: 120,
-                      color: Colors.white,
-                    ),
-                  );
-                },
-              ),
-              const SizedBox(height: 24),
-              AnimatedBuilder(
-                animation: _controller,
-                builder: (context, child) {
-                  return Opacity(
-                    opacity: _opacityAnimation.value,
-                    child: Column(
-                      children: [
-                        Text(
-                          AppLocalizations.of(context).get('appName'),
-                          style: const TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+        child: SafeArea(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  AnimatedBuilder(
+                    animation: _controller,
+                    builder: (context, child) {
+                      return Transform.scale(
+                        scale: _scaleAnimation.value,
+                        child: Icon(
+                          Icons.bakery_dining,
+                          size: isSmallScreen ? 96 : 120,
+                          color: Colors.white,
                         ),
-                        const SizedBox(height: 8),
-                        Text(
-                          AppLocalizations.of(context).get('assistant'),
-                          style: const TextStyle(
-                            fontSize: 24,
-                            color: Color(0xFFFEF3C7),
-                          ),
+                      );
+                    },
+                  ),
+                  SizedBox(height: isSmallScreen ? 20 : 24),
+                  AnimatedBuilder(
+                    animation: _controller,
+                    builder: (context, child) {
+                      return Opacity(
+                        opacity: _opacityAnimation.value,
+                        child: Column(
+                          children: [
+                            Text(
+                              AppLocalizations.of(context).get('appName'),
+                              style: TextStyle(
+                                fontSize: isSmallScreen ? 26 : 32,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: isSmallScreen ? 6 : 8),
+                            Text(
+                              AppLocalizations.of(context).get('assistant'),
+                              style: TextStyle(
+                                fontSize: isSmallScreen ? 20 : 24,
+                                color: const Color(0xFFFEF3C7),
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  );
-                },
+                      );
+                    },
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

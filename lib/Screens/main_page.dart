@@ -48,28 +48,31 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  Widget _buildFlourCard(int index) {
+  Widget _buildFlourCard(int index, BuildContext context) {
     final flour = flours[index];
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isSmallScreen = screenWidth < 360;
+
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8),
+      margin: EdgeInsets.symmetric(vertical: isSmallScreen ? 6 : 8),
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
         child: Column(
           children: [
             Row(
               children: [
                 Text(
                   'קמח ${index + 1}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                    fontSize: isSmallScreen ? 15 : 16,
                   ),
                 ),
-                if (flours.length > 1) 
+                if (flours.length > 1)
                   const Spacer(),
                 if (flours.length > 1)
                   IconButton(
@@ -77,10 +80,15 @@ class _MainPageState extends State<MainPage> {
                     color: Colors.red[400],
                     onPressed: () => _removeFlour(index),
                     tooltip: 'הסר קמח',
+                    padding: EdgeInsets.all(isSmallScreen ? 8 : 12),
+                    constraints: BoxConstraints(
+                      minWidth: isSmallScreen ? 40 : 48,
+                      minHeight: isSmallScreen ? 40 : 48,
+                    ),
                   ),
               ],
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: isSmallScreen ? 10 : 12),
             TextField(
               textDirection: TextDirection.rtl,
               decoration: InputDecoration(
@@ -93,10 +101,14 @@ class _MainPageState extends State<MainPage> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: isSmallScreen ? 12 : 16,
+                  vertical: isSmallScreen ? 12 : 16,
+                ),
               ),
               onChanged: (value) => flour.name = value,
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: isSmallScreen ? 10 : 12),
             TextField(
               textDirection: TextDirection.ltr,
               textAlign: TextAlign.right,
@@ -112,6 +124,10 @@ class _MainPageState extends State<MainPage> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: isSmallScreen ? 12 : 16,
+                  vertical: isSmallScreen ? 12 : 16,
+                ),
               ),
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
@@ -125,13 +141,17 @@ class _MainPageState extends State<MainPage> {
   }
 
   Widget _buildIngredientInput(
+    BuildContext context,
     String label,
     TextEditingController controller,
     IconData icon,
     {String? helperText}
   ) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isSmallScreen = screenWidth < 360;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: EdgeInsets.symmetric(vertical: isSmallScreen ? 6 : 8),
       child: TextField(
         controller: controller,
         textDirection: TextDirection.ltr,
@@ -141,10 +161,15 @@ class _MainPageState extends State<MainPage> {
           labelText: label,
           helperText: helperText,
           helperMaxLines: 2,
+          helperStyle: TextStyle(fontSize: isSmallScreen ? 11 : 12),
           suffixText: 'גרם',
           prefixIcon: Icon(icon, color: Theme.of(context).primaryColor),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
+          ),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: isSmallScreen ? 12 : 16,
+            vertical: isSmallScreen ? 12 : 16,
           ),
         ),
         inputFormatters: [
@@ -217,13 +242,16 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isSmallScreen = screenWidth < 360;
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: _buildAppBar(),
       body: CustomScrollView(
         slivers: [
           SliverPadding(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
                 // Flours Section
@@ -232,27 +260,34 @@ class _MainPageState extends State<MainPage> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(16),
+                    padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
+                            Text(
                               'קמחים',
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: isSmallScreen ? 18 : 20,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             ElevatedButton.icon(
                               onPressed: _addFlour,
-                              icon: const Icon(Icons.add),
-                              label: const Text('הוסף קמח'),
+                              icon: const Icon(Icons.add, size: 20),
+                              label: Text(
+                                'הוסף קמח',
+                                style: TextStyle(fontSize: isSmallScreen ? 13 : 14),
+                              ),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Theme.of(context).primaryColor,
                                 foregroundColor: Colors.white,
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: isSmallScreen ? 12 : 16,
+                                  vertical: isSmallScreen ? 8 : 12,
+                                ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
@@ -260,48 +295,51 @@ class _MainPageState extends State<MainPage> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 16),
-                        ...flours.asMap().entries.map((entry) => 
-                          _buildFlourCard(entry.key)
+                        SizedBox(height: isSmallScreen ? 12 : 16),
+                        ...flours.asMap().entries.map((entry) =>
+                          _buildFlourCard(entry.key, context)
                         ).toList(),
                       ],
                     ),
                   ),
                 ),
-                
-                const SizedBox(height: 24),
-                
+
+                SizedBox(height: isSmallScreen ? 16 : 24),
+
                 // Other Ingredients Section
                 Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(16),
+                    padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           'מרכיבים נוספים',
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: isSmallScreen ? 18 : 20,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 16),
+                        SizedBox(height: isSmallScreen ? 12 : 16),
                         _buildIngredientInput(
+                          context,
                           'מים',
                           waterController,
                           Icons.water_drop,
                           helperText: 'סך ההידרציה כולל מים + חצי ממשקל המחמצת',
                         ),
                         _buildIngredientInput(
+                          context,
                           'מלח',
                           saltController,
                           Icons.grain,
                           helperText: 'מומלץ: 1.8-2.2% ממשקל הקמח הכולל',
                         ),
                         _buildIngredientInput(
+                          context,
                           'מחמצת',
                           starterController,
                           Icons.bakery_dining,
@@ -311,20 +349,20 @@ class _MainPageState extends State<MainPage> {
                     ),
                   ),
                 ),
-                
-                const SizedBox(height: 24),
-                
+
+                SizedBox(height: isSmallScreen ? 16 : 24),
+
                 // Calculate Button
                 SizedBox(
                   width: double.infinity,
-                  height: 56,
+                  height: isSmallScreen ? 50 : 56,
                   child: ElevatedButton.icon(
                     onPressed: _calculate,
-                    icon: const Icon(Icons.calculate),
-                    label: const Text(
+                    icon: Icon(Icons.calculate, size: isSmallScreen ? 20 : 24),
+                    label: Text(
                       'חשב מתכון',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: isSmallScreen ? 16 : 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -339,11 +377,11 @@ class _MainPageState extends State<MainPage> {
                   ),
                 ),
 
-                const SizedBox(height: 24),
+                SizedBox(height: isSmallScreen ? 16 : 24),
 
                 // Information Note
                 Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
                   decoration: BoxDecoration(
                     color: Colors.amber.shade50,
                     borderRadius: BorderRadius.circular(12),
@@ -357,14 +395,14 @@ class _MainPageState extends State<MainPage> {
                     'כולל את המים והקמח מהמחמצת.',
                     style: TextStyle(
                       color: Colors.brown[700],
-                      fontSize: 14,
+                      fontSize: isSmallScreen ? 13 : 14,
                     ),
                     textAlign: TextAlign.right,
                     textDirection: TextDirection.rtl,
                   ),
                 ),
-                
-                const SizedBox(height: 24),
+
+                SizedBox(height: isSmallScreen ? 16 : 24),
               ]),
             ),
           ),

@@ -14,9 +14,15 @@ class HomeScreen extends StatelessWidget {
     required Color iconBackgroundColor,
     required VoidCallback onTap,
   }) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isSmallScreen = screenWidth < 360;
+
     return Card(
       elevation: 4,
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: EdgeInsets.symmetric(
+        horizontal: isSmallScreen ? 12 : 16,
+        vertical: isSmallScreen ? 6 : 8,
+      ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
@@ -24,36 +30,36 @@ class HomeScreen extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(16),
         child: Container(
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(isSmallScreen ? 16 : 20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
                 decoration: BoxDecoration(
                   color: iconBackgroundColor.withOpacity(0.1),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
                   icon,
-                  size: 48,
+                  size: isSmallScreen ? 40 : 48,
                   color: iconBackgroundColor,
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: isSmallScreen ? 12 : 16),
               Text(
                 AppLocalizations.of(context).get(titleKey),
-                style: const TextStyle(
-                  fontSize: 24,
+                style: TextStyle(
+                  fontSize: isSmallScreen ? 20 : 24,
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: isSmallScreen ? 6 : 8),
               Text(
                 AppLocalizations.of(context).get(descriptionKey),
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: isSmallScreen ? 14 : 16,
                   color: Colors.grey[600],
                 ),
                 textAlign: TextAlign.center,
@@ -67,6 +73,10 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isSmallScreen = screenWidth < 360 || screenHeight < 600;
+
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -82,61 +92,73 @@ class HomeScreen extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-              const SizedBox(height: 48),
-              
+              SizedBox(height: isSmallScreen ? 24 : 48),
+
               // App Logo and Title
               Container(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.15),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.bakery_dining,
-                  size: 72,
+                  size: isSmallScreen ? 56 : 72,
                   color: Colors.white,
                 ),
               ),
-              const SizedBox(height: 24),
-              Text(
-                AppLocalizations.of(context).get('appName'),
-                style: const TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+              SizedBox(height: isSmallScreen ? 16 : 24),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  AppLocalizations.of(context).get('appName'),
+                  style: TextStyle(
+                    fontSize: isSmallScreen ? 24 : 32,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ),
-              Text(
-                AppLocalizations.of(context).get('assistant'),
-                style: const TextStyle(
-                  fontSize: 24,
-                  color: Color(0xFFFEF3C7),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  AppLocalizations.of(context).get('assistant'),
+                  style: TextStyle(
+                    fontSize: isSmallScreen ? 18 : 24,
+                    color: const Color(0xFFFEF3C7),
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ),
-              const SizedBox(height: 48),
+              SizedBox(height: isSmallScreen ? 24 : 48),
               
               // Main Content Area
               Expanded(
                 child: Container(
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFFEF3C7),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFEF3C7),
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(32),
-                      topRight: Radius.circular(32),
+                      topLeft: Radius.circular(isSmallScreen ? 24 : 32),
+                      topRight: Radius.circular(isSmallScreen ? 24 : 32),
                     ),
                   ),
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(vertical: 32),
+                    padding: EdgeInsets.symmetric(vertical: isSmallScreen ? 20 : 32),
                     child: Column(
                       children: [
-                        Text(
-                          AppLocalizations.of(context).get('chooseYourTool'),
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Text(
+                            AppLocalizations.of(context).get('chooseYourTool'),
+                            style: TextStyle(
+                              fontSize: isSmallScreen ? 20 : 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
                         ),
-                        const SizedBox(height: 24),
+                        SizedBox(height: isSmallScreen ? 16 : 24),
                         
                         // Recipe Calculator Card
                         _buildNavigationCard(

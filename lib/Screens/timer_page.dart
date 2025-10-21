@@ -327,10 +327,13 @@ class _TimerPageState extends State<TimerPage> {
   }
 
  Widget _buildTimerCard(BreadTimer timer) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isSmallScreen = screenWidth < 360;
+
     return Card(
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: EdgeInsets.only(bottom: isSmallScreen ? 12 : 16),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -344,17 +347,22 @@ class _TimerPageState extends State<TimerPage> {
                       icon: const Icon(Icons.settings_outlined),
                       onPressed: () => _editTimerSettings(timer),
                       tooltip: 'ערוך הגדרות טיימר',
+                      padding: EdgeInsets.all(isSmallScreen ? 6 : 8),
+                      constraints: BoxConstraints(
+                        minWidth: isSmallScreen ? 40 : 48,
+                        minHeight: isSmallScreen ? 40 : 48,
+                      ),
                     ),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      padding: EdgeInsets.symmetric(horizontal: isSmallScreen ? 6 : 8),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             timer.stage,
-                            style: const TextStyle(
-                              fontSize: 20,
+                            style: TextStyle(
+                              fontSize: isSmallScreen ? 18 : 20,
                               fontWeight: FontWeight.bold,
                             ),
                             textAlign: TextAlign.right,
@@ -363,7 +371,7 @@ class _TimerPageState extends State<TimerPage> {
                           Text(
                             timer.description,
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: isSmallScreen ? 11 : 12,
                               color: Colors.grey[600],
                             ),
                             textAlign: TextAlign.right,
@@ -373,37 +381,43 @@ class _TimerPageState extends State<TimerPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  Icon(timer.icon),
+                  SizedBox(width: isSmallScreen ? 8 : 12),
+                  Icon(timer.icon, size: isSmallScreen ? 22 : 24),
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: isSmallScreen ? 12 : 16),
             
             // Folds information
             if (timer.stage == 'תסיסה ראשונית' && timer.foldTimes != null)
               Padding(
-                padding: const EdgeInsets.only(bottom: 8),
+                padding: EdgeInsets.only(bottom: isSmallScreen ? 6 : 8),
                 child: Text(
                   'קיפולים מתוכננים: ${timer.foldTimes!.length}',
-                  style: TextStyle(color: Colors.grey[600]),
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: isSmallScreen ? 13 : 14,
+                  ),
                   textAlign: TextAlign.right,
                   textDirection: TextDirection.rtl,
                 ),
               ),
-            
+
             // Progress bar
-            LinearProgressIndicator(
-              value: timer.isRunning
-                  ? 1 - (timer.remainingSeconds / (timer.durationMinutes * 60))
-                  : 0,
-              backgroundColor: Colors.grey[200],
-              valueColor: AlwaysStoppedAnimation<Color>(
-                Theme.of(context).primaryColor,
+            SizedBox(
+              height: isSmallScreen ? 3 : 4,
+              child: LinearProgressIndicator(
+                value: timer.isRunning
+                    ? 1 - (timer.remainingSeconds / (timer.durationMinutes * 60))
+                    : 0,
+                backgroundColor: Colors.grey[200],
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  Theme.of(context).primaryColor,
+                ),
               ),
             ),
-            const SizedBox(height: 16),
-            
+            SizedBox(height: isSmallScreen ? 12 : 16),
+
             // Timer controls
             Directionality(
               textDirection: TextDirection.rtl,
@@ -418,10 +432,20 @@ class _TimerPageState extends State<TimerPage> {
                         _startTimer(timer);
                       }
                     },
-                    icon: Icon(timer.isRunning ? Icons.stop : Icons.play_arrow),
-                    label: Text(timer.isRunning ? 'עצור' : 'התחל'),
+                    icon: Icon(
+                      timer.isRunning ? Icons.stop : Icons.play_arrow,
+                      size: isSmallScreen ? 18 : 20,
+                    ),
+                    label: Text(
+                      timer.isRunning ? 'עצור' : 'התחל',
+                      style: TextStyle(fontSize: isSmallScreen ? 14 : 16),
+                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: timer.isRunning ? Colors.red : null,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: isSmallScreen ? 12 : 16,
+                        vertical: isSmallScreen ? 10 : 12,
+                      ),
                     ),
                   ),
                   Column(
@@ -431,20 +455,20 @@ class _TimerPageState extends State<TimerPage> {
                         timer.isRunning
                             ? _formatTime(timer.remainingSeconds)
                             : _formatTime(timer.durationMinutes * 60),
-                        style: const TextStyle(
-                          fontSize: 24,
+                        style: TextStyle(
+                          fontSize: isSmallScreen ? 20 : 24,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'monospace',
                         ),
                       ),
-                      if (timer.isRunning && 
+                      if (timer.isRunning &&
                           timer.stage == 'תסיסה ראשונית' &&
                           timer.completedFolds < (timer.foldTimes?.length ?? 0) &&
                           _getNextFoldTime(timer) > 0)  // Only show if there's time remaining
                         Text(
                           'קיפול הבא בעוד: ${_formatTime(_getNextFoldTime(timer))}',
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: isSmallScreen ? 11 : 12,
                             color: Colors.grey[600],
                           ),
                           textAlign: TextAlign.left,
@@ -493,6 +517,9 @@ int _getNextFoldTime(BreadTimer timer) {
 
    @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isSmallScreen = screenWidth < 360;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.timerType == TimerType.making ? 'טיימר הכנה' : 'טיימר אפייה'),
@@ -517,7 +544,7 @@ int _getNextFoldTime(BreadTimer timer) {
       body: Directionality(
         textDirection: TextDirection.rtl,
         child: ListView.builder(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
           itemCount: timers.length,
           itemBuilder: (context, index) => _buildTimerCard(timers[index]),
         ),
