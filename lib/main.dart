@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'screens/welcome_screen.dart';
+import 'Screens/welcome_screen.dart';
 import 'l10n/app_localizations.dart';
 
 void main() {
@@ -120,7 +120,7 @@ class MyApp extends StatelessWidget {
         ),
         
         // Card Theme
-        cardTheme: CardTheme(
+        cardTheme: CardThemeData(
           elevation: 4,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -142,7 +142,7 @@ class MyApp extends StatelessWidget {
         ),
         
         // Dialog Theme
-        dialogTheme: DialogTheme(
+        dialogTheme: DialogThemeData(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
